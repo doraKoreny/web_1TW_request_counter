@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, redirect, session
 
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__)
 
-counts= 0
+METHODS = ['GET', 'POST', 'PUT', 'DELETE']
+counts= {}
 
 @app.route('/')
 def welcome():
@@ -13,7 +16,11 @@ def welcome():
 @app.route('/request_counter')
 def visit_counter():
     global counts
-    counts += 1
+    for item in METHODS:
+        if item not in counts:
+            counts[item] = 1
+        else:
+            counts[item] += 1
     return redirect('/')
 
 if __name__ == '__main__':
